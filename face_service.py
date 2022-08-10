@@ -31,10 +31,14 @@ def regist():
         print(traceback.print_exc())
         return jsonify({'status': 500})
 
-@app.route('/face', methods=['GET'])
+@app.route('/face', methods=['POST'])
 def face():
     try:
-        base64Data = request.args.get('img')
+        # json = request.json
+        # base64Data = json['img']
+        form = request.form
+        base64Data = form.get('img')
+        # base64Data = request.args.get('img')
         img = base64.b64decode(base64Data)
         image = cv2.imdecode(np.frombuffer(img, np.uint8), cv2.IMREAD_COLOR)
         image   = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
@@ -60,4 +64,4 @@ def face():
 
 if __name__ == '__main__':
     retinaface = RetinafaceApi()
-    app.run()    
+    app.run(host='0.0.0.0')    
